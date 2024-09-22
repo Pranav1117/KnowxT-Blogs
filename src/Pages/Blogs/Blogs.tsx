@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userAtom, userSelector } from "../../Recoil/User";
 import BlogsSkeleton from "../../Components/Skeletons/BlogsSkeleton";
+import { fetchAllBlogs } from "../../Services/BlogsService";
 
 interface authorProp {
   email: string;
@@ -25,22 +26,18 @@ const Blogs = () => {
   const user = useRecoilValue(userAtom)
   const [allBlogs, setAllBlogs] = useState<blog[]>([]);
   const [loading, setLoading] = useState(false);
-console.log(user)
+  console.log(user)
+  
   useEffect(() => {
-    const fetchAllBlogs = async () => {
+    const fetchBlogs = async () => {
       setLoading(true);
-      try {
-        const { data } = await axios.get(
-          "http://127.0.0.1:8787/api/v1/blog/all"
-        );
-        console.log("all blogs", data.blogs);
-        setAllBlogs(data.blogs);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
+      const response = await fetchAllBlogs()
+      if(response?.status === 200){
+        setAllBlogs(response?.data.blogs);
       }
-    };  
-    fetchAllBlogs();
+      setLoading(false);
+    }  
+    fetchBlogs();
   }, []);
 
   if (loading) {
@@ -56,7 +53,6 @@ console.log(user)
   return (
     <div className="flex py-10 px-20 ">
       <div className="w-[70%] mx-auto">
-      <button className="pt-20" onClick={() => console.log(user)}>SS</button>
         {allBlogs.length > 0
           ? allBlogs.map((blog, index) => {
               return (

@@ -1,5 +1,5 @@
 import { atom, selector } from "recoil";
-import { fetchUser } from "../Services/Users";
+import { fetchUser } from "../Services/UsersService";
 import { getUserToken } from "../Utils";
 
 const token = getUserToken();

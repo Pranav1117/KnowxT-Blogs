@@ -1,11 +1,14 @@
-import { Link, useNavigate } from "react-router-dom";
-import * as Common from "../../../../Components/Common";
-import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Common from "../../../../Components/Common";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Spinner from "../../../../Components/Common/Spinner";
+import { signUp } from "../../../../Services/UsersService";
+import * as CONSTANT from "../../../../Constants/index";
+
 interface FormValues {
   username: string;
   email: string;
@@ -20,7 +23,7 @@ const initialValues: FormValues = {
 
 const SignUpForm: React.FC = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+
   const validationSchema = Yup.object({
     username: Yup.string().required("Username is required"),
     email: Yup.string()
@@ -32,22 +35,11 @@ const SignUpForm: React.FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
-    try {
-      const res = await axios.post(
-        "http://127.0.0.1:8787/api/v1/user/signup",
-        values
-      );
-      if (res.status === 200) {
-        localStorage.setItem("knowxt-token", res.data.token);
-        toast.success("SignUp Succesful")
-        navigate("/blogs");
-      }
-    } catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        toast.error(err.response.data.message || "An error occurred.");
-      } else {
-        toast.error("Network error or unknown error.");
-      }
+    const response = await signUp(values);
+    if (response?.status === 200) {
+      localStorage.setItem("knowxt-token", response.data.token);
+      toast.success(CONSTANT.NOTIFICATIONS.SIGNUP_SUCCESS);
+      navigate(CONSTANT.ROUTES.BLOG_ALL);
     }
   };
 
@@ -144,7 +136,7 @@ const SignUpForm: React.FC = () => {
                       disabled={isSubmitting}
                       className="bg-black text-white p-2 rounded w-[100%] hover:bg-gray-900"
                     >
-                      {isSubmitting ? <Spinner/> : "Submit" }
+                      {isSubmitting ? <Spinner /> : "Submit"}
                     </button>
                   </div>
                 </div>

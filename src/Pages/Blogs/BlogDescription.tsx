@@ -1,12 +1,15 @@
-import axios from "axios";
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import AuthorComponent from "./BlogComponents/AuthorComponent";
 import { MdOutlineModeEditOutline, MdDeleteOutline } from "react-icons/md";
-import toast from "react-hot-toast";
-import { getFormatedDate } from "../../Utils/formatDate";
+import AuthorComponent from "./BlogComponents/AuthorComponent";
+import { getFormatedDate } from "../../Utils/index";
 import BlogDescriptionSkeleton from "../../Components/Skeletons/BlogDescriptionSkeleton";
-
+import { deleteBlog, fetchBlogById } from "../../Services/BlogsService";
+import * as CONSTANT from "../../Constants/index";
+import Modal from "../../Components/Common/Modal";
+import * as Common from "../../Components/Common";
+import { buttonType } from "../../Components/Common/Button";
 interface Author {
   username: string;
   email: string;
@@ -30,38 +33,32 @@ const BlogDescription = () => {
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
   const handleEdit = () => {
-    navigate("/updateblog", { state: blog });
+    navigate(CONSTANT.ROUTES.BLOG_UPDATE, { state: blog });
   };
 
   const handleDelete = async () => {
-    try {
-      const res = await axios.delete(
-        `http://127.0.0.1:8787/api/v1/blog/deleteblog/${blog.id}`
-      );
-      if (res.status === 200) {
-        toast.success(res.data.message);
-        navigate("/blogs");
-      }
-    } catch (error) {
-      toast.error("Failed to delete blog");
+    setDeleteLoading(true);
+    const response = await deleteBlog(blog?.id);
+    if (response?.status === 200) {
+      setDeleteLoading(false);
+      toast.success(response?.data.message);
+      navigate(CONSTANT.ROUTES.BLOG_ALL);
     }
+    setShowDeletePopup(false);
   };
 
   useEffect(() => {
     const fetchBlog = async () => {
-      try {
-        const res = await axios.get(
-          `http://127.0.0.1:8787/api/v1/blog/details/${state}`
-        );
-        console.log(res.data.blog);
-        setBlog(res.data.blog);
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to fetch the blog");
-        setLoading(false);
+      setLoading(true);
+      const response = await fetchBlogById(state);
+      if (response?.status === 200) {
+        setBlog(response.data.blog);
       }
+      setLoading(false);
     };
     fetchBlog();
   }, [state]);
@@ -94,7 +91,7 @@ const BlogDescription = () => {
                   />
                   <MdDeleteOutline
                     className="cursor-pointer"
-                    onClick={handleDelete}
+                    onClick={() => setShowDeletePopup(true)}
                   />
                 </div>
               </div>
@@ -104,13 +101,33 @@ const BlogDescription = () => {
           <div className="p-2 w-[25%]">
             <div className="text-xl">Author</div>
             <AuthorComponent
-              authorName={ blog.author.username }
+              authorName={blog.author.username}
               quote="lorem espum fddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
             />
           </div>
         </div>
       ) : (
         <div>Blog details not available.</div>
+      )}
+      {showDeletePopup ? (
+        <Modal
+          title="Confirm Delete"
+          onClose={() => {
+            setShowDeletePopup(false);
+          }}
+        >
+          <div className="flex flex-col gap-4">
+            <div>Are you sure you want to delete blog?</div>
+            <Common.Button
+              label="Delete"
+              type={buttonType.Submit}
+              onClick={handleDelete}
+              loading={deleteLoading}
+            />
+          </div>
+        </Modal>
+      ) : (
+        ""
       )}
     </div>
   );

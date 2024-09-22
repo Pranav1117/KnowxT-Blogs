@@ -1,4 +1,3 @@
-import React from "react";
 import LoginForm from "./authComponents/Signup/LoginForm";
 import Quote from "../../Components/Quote";
 

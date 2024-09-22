@@ -1,24 +1,21 @@
-import { Link, useNavigate } from "react-router-dom";
-// import * as Common from "../../../../Components/Common";
-import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import { useState } from "react";
 import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import Spinner from "../../../../Components/Common/Spinner";
-
+import { login } from "../../../../Services/UsersService";
+import * as CONSTANT from "../../../../Constants/index";
 interface FormValues {
   email: string;
   password: string;
 }
 const initialValues: FormValues = {
-  email: "",
+  email: "",  
   password: "",
 };
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -30,23 +27,13 @@ const LoginForm: React.FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
-    try {
-      const res = await axios.post(
-        "http://127.0.0.1:8787/api/v1/user/signin",
-        values
-      );
-      if (res.status == 200) {
-        localStorage.setItem("knowxt-token", res.data.token);
-        toast.success("Login Succesful");
-        navigate("/blogs");
-      }
-    } catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        toast.error(err.response.data.message || "An error occurred.");
-      } else {
-        toast.error("Network error");
-      }
-    }
+   const response = await login(values)
+   console.log(response)
+   if(response?.status === 200){
+    localStorage.setItem("knowxt-token", response.data.token);
+    toast.success(CONSTANT.NOTIFICATIONS.LOGIN_SUCCESS);
+    navigate(CONSTANT.ROUTES.BLOG_ALL)
+   }
   };
 
   const inputFieldsCss = "border-2 rounded p-2";

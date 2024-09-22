@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { getFormatedDate } from "../../../Utils/formatDate";
-import { useEffect } from "react";
+import { getFormatedDate } from "../../../Utils/index";
 
 interface BlogCardProps {
   title: string;

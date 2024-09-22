@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Spinner } from "../../Components/Common";
 
 interface inputData {
   title: string;
@@ -10,8 +11,9 @@ interface inputData {
 
 const UpdateBlog = () => {
   const { state } = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
   const [inputData, setInputData] = useState<inputData>({
     title: state.title,
     content: state.content,
@@ -29,6 +31,7 @@ const UpdateBlog = () => {
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const updatedBlog = { ...inputData, id: state.id };
       const res = await axios.patch(
@@ -36,10 +39,12 @@ const UpdateBlog = () => {
         updatedBlog
       );
       if (res.status === 200) {
+        setLoading(false);
         toast.success("Blog updated Succesfully");
-        navigate("/blogs")
+        navigate("/blogs");
       }
     } catch (error) {
+      setLoading(false);
       toast.error("Failed to update Blog");
     }
   };
@@ -81,11 +86,11 @@ const UpdateBlog = () => {
             </div>
             <div className="self-end">
               <button
-                className="bg-blue-600 py-2 px-6 text-white rounded hover:bg-blue-800"
+                className="bg-blue-600 py-2 px-6 text-white rounded hover:bg-blue-800 min-w-28"
                 onClick={(e) => handleUpdate(e)}
               >
                 {" "}
-                Update
+                {loading ? <Spinner /> : "Update"}
               </button>
             </div>
           </div>
