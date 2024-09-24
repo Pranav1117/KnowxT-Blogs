@@ -28,7 +28,6 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (values: FormValues) => {
    const response = await login(values)
-   console.log(response)
    if(response?.status === 200){
     localStorage.setItem("knowxt-token", response.data.token);
     toast.success(CONSTANT.NOTIFICATIONS.LOGIN_SUCCESS);

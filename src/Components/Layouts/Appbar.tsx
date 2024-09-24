@@ -7,15 +7,15 @@ import axios from "axios";
 
 const Appbar = () => {
   const navigate = useNavigate();
-  const [showDropDown, setShowDropDown] = useState(false)
-  const [user,setUser] = useRecoilState(userAtom)
+  const [showDropDown, setShowDropDown] = useState(false);
+  const [user, setUser] = useRecoilState(userAtom);
 
   const handleLogout = () => {
     localStorage.removeItem("knowxt-token");
     toast.success("Log out succesfully");
     navigate("/login");
   };
-  
+
   useEffect(() => {
     const token = localStorage.getItem("knowxt-token");
     const fetchUser = async () => {
@@ -25,8 +25,7 @@ const Appbar = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(data.user)
-      setUser(data.user)
+      setUser(data.user);
     };
     fetchUser();
   }, []);
@@ -42,11 +41,16 @@ const Appbar = () => {
       </div>
 
       {/* User icon to toggle dropdown */}
-      <div
-        className="bg-gray-700 cursor-pointer text-white text-xl rounded-full h-10 w-10 flex justify-center items-center"
-        onClick={() => setShowDropDown(!showDropDown)}
-      >
-        {user?.username?.[0]}
+
+
+      <div className="flex gap-4 items-center">
+       {window.location.pathname === "/createnewblog" ? "" :  <button className="bg-green-500 px-4 py-1.5 rounded-lg cursor-pointer" onClick={()=>navigate("/createnewblog")}>Write your story</button>}
+        <div
+          className="bg-gray-700 cursor-pointer text-white text-xl rounded-full h-10 w-10 flex justify-center items-center"
+          onClick={() => setShowDropDown(!showDropDown)}
+        >
+          {user?.username?.[0]}
+        </div>
       </div>
 
       {/* Dropdown */}
