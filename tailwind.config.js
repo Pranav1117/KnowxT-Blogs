@@ -5,7 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        customRed: '#C72640', // Add custom hex color
+        dateColor: "#E04E66"
+      },
+    },
   },
   plugins: [],
 }

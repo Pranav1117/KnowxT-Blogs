@@ -7,7 +7,7 @@ const Layout = () => {
 
   return (
     <div>
-        <div className='shadow-lg w-[100%] z-10 h-14 fixed bg-white'><Appbar/></div>
+        <div className=' w-[100%] z-10 h-14 fixed bg-customRed'><Appbar/></div>
         <div className='overflow-auto min-h-[calc(100vh-82px)]'><Outlet/></div>
         <div className='h-6'><Footer/></div>
     </div>

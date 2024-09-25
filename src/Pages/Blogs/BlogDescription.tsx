@@ -81,17 +81,22 @@ const BlogDescription = () => {
                 {blog.title}
               </h1>
               <div className="flex items-center gap-8 p-4 justify-end">
-                <p className="text-sm text-gray-500 ">
+                <p className="text-sm text-gray-500">
                   Published on {getFormatedDate(blog.createdAt)}
                 </p>
                 <div className="flex gap-3">
                   <MdOutlineModeEditOutline
                     className="cursor-pointer"
                     onClick={handleEdit}
+                    color="#E04E66"
+                    size={20}
+                    
                   />
                   <MdDeleteOutline
                     className="cursor-pointer"
                     onClick={() => setShowDeletePopup(true)}
+                    color="#E04E66"
+                    size={20}
                   />
                 </div>
               </div>

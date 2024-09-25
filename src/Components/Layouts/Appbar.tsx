@@ -31,31 +31,34 @@ const Appbar = () => {
   }, []);
 
   return (
-    <div className="w-full flex justify-between items-center px-10 py-3">
+    <div className="w-full z-10 flex justify-between items-center px-10 py-3">
       {/* Logo */}
       <div
-        className="text-2xl font-bold cursor-pointer"
+        className="text-2xl text-white font-bold cursor-pointer"
         onClick={() => navigate("/blogs")}
       >
         KnowXT
       </div>
 
       {/* User icon to toggle dropdown */}
-
-
-      <div className="flex gap-4 items-center">
-       {window.location.pathname === "/createnewblog" ? "" :  <button className="bg-green-500 px-4 py-1.5 rounded-lg cursor-pointer" onClick={()=>navigate("/createnewblog")}>Write your story</button>}
-        <div
-          className="bg-gray-700 cursor-pointer text-white text-xl rounded-full h-10 w-10 flex justify-center items-center"
-          onClick={() => setShowDropDown(!showDropDown)}
-        >
-          {user?.username?.[0]}
-        </div>
+      <div className="flex gap-8 items-center">
+        {window.location.pathname === "/createnewblog" ? (
+          ""
+        ) : (
+          <button
+            className="text-white  px-2 py-1 rounded-lg cursor-pointer"
+            onClick={() => navigate("/createnewblog")}
+          >
+            Write your story
+          </button>
+        )}
+        <div className="text-white cursor-pointer">Profile</div>
+        <div className="text-white cursor-pointer">Logout</div>
       </div>
 
       {/* Dropdown */}
-      {showDropDown && (
-        <div className="absolute top-16 right-10 bg-white shadow-md rounded-lg w-56">
+      {/* {showDropDown && (
+        <div className="absolute top-16 right-10  shadow-md rounded-lg w-56">
           <div className="py-2">
             <div
               className="flex items-center gap-x-3.5 py-2 px-4 hover:bg-gray-100 text-gray-800 cursor-pointer"
@@ -97,7 +100,7 @@ const Appbar = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
