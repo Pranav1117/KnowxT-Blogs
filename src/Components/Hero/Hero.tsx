@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate()
   return (
     <div className="relative min-h-[60vh] max-h-72 text-white bg-customRed">
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
@@ -23,7 +25,7 @@ const Hero = () => {
           <button className="border border-white rounded px-4 py-2 duration-100 ease-linear hover:bg-white hover:text-black">
             Start Reading
           </button>
-          <button className="bg-white text-black border border-white rounded duration-100 ease-linear px-4 py-2 hover:bg-transparent hover:text-white">
+          <button className="bg-white text-black border border-white rounded duration-100 ease-linear px-4 py-2 hover:bg-transparent hover:text-white" onClick={() => navigate("/createnewblog")}>
             Write your story
           </button>
         </div>

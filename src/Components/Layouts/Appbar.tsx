@@ -7,7 +7,6 @@ import axios from "axios";
 
 const Appbar = () => {
   const navigate = useNavigate();
-  const [showDropDown, setShowDropDown] = useState(false);
   const [user, setUser] = useRecoilState(userAtom);
 
   const handleLogout = () => {
@@ -32,7 +31,6 @@ const Appbar = () => {
 
   return (
     <div className="w-full z-10 flex justify-between items-center px-10 py-3">
-      {/* Logo */}
       <div
         className="text-2xl text-white font-bold cursor-pointer"
         onClick={() => navigate("/blogs")}
@@ -52,8 +50,8 @@ const Appbar = () => {
             Write your story
           </button>
         )}
-        <div className="text-white cursor-pointer">Profile</div>
-        <div className="text-white cursor-pointer">Logout</div>
+        <div className="text-white cursor-pointer" onClick={() => navigate("/profile")}>Profile</div>
+        <div className="text-white cursor-pointer" onClick={handleLogout}>Logout</div>
       </div>
 
       {/* Dropdown */}

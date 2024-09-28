@@ -27,7 +27,7 @@ const Blogs = () => {
   const user = useRecoilValue(userAtom);
   const [allBlogs, setAllBlogs] = useState<blog[]>([]);
   const [loading, setLoading] = useState(false);
-
+console.log(user);
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
