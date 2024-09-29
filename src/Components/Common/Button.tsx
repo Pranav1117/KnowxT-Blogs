@@ -1,4 +1,3 @@
-import React from "react";
 import * as Common from "../Common/";
 
 type ButtonProps = {
