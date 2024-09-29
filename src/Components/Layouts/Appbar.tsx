@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { userAtom } from "../../Recoil/User";
 import { API, ROUTES } from "../../Constants";
 
 const Appbar = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useRecoilState(userAtom);
+  const setUser = useSetRecoilState(userAtom);
 
   const handleLogout = () => {
     localStorage.removeItem("knowxt-token");
