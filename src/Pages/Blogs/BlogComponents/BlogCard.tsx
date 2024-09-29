@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { getFormatedDate } from "../../../Utils/index";
 import { BlogCardProps } from "../../../Types/blogsTypes";
 
 

@@ -7,26 +7,25 @@ import AuthorComponent from "./BlogComponents/AuthorComponent";
 import Modal from "../../Components/Common/Modal";
 import { getFormatedDate } from "../../Utils/index";
 import { deleteBlog, fetchBlogById } from "../../Services/BlogsService";
-import { Common, Skeletons,  } from "../../Components"
+import { Common, Skeletons } from "../../Components";
 import { buttonType } from "../../Components/Common/Button";
-import { useRecoilValue, useRecoilValueLoadable } from "recoil";
-import { userAtom, userSelector } from "../../Recoil/User";
+import { useRecoilValue } from "recoil";
+import { userAtom } from "../../Recoil/User";
 import { Blog } from "../../Types/blogsTypes";
-
 
 const BlogDescription = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  
+
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
   // const userLoadable = useRecoilValueLoadable(userSelector);
-  const user = useRecoilValue(userAtom)
-  
+  const user = useRecoilValue(userAtom);
+
   const handleEdit = () => {
     navigate(CONSTANT.ROUTES.BLOG_UPDATE, { state: blog });
   };
@@ -60,7 +59,6 @@ const BlogDescription = () => {
         <Skeletons.BlogDescription />
       </>
     );
-  if (error) return <div>{error}</div>;
 
   return (
     <div className="pt-14 md:pt-24 md:px-8">
@@ -75,13 +73,16 @@ const BlogDescription = () => {
                 <p className="text-sm text-gray-500">
                   Published on {getFormatedDate(blog.createdAt)}
                 </p>
-                <div className={`${user?.id === blog.author.id ? "flex" : "hidden"} gap-3`}>
+                <div
+                  className={`${
+                    user?.id === blog.author.id ? "flex" : "hidden"
+                  } gap-3`}
+                >
                   <MdOutlineModeEditOutline
                     className="cursor-pointer"
                     onClick={handleEdit}
                     color="#E04E66"
                     size={20}
-                    
                   />
                   <MdDeleteOutline
                     className="cursor-pointer"
@@ -113,7 +114,9 @@ const BlogDescription = () => {
           }}
         >
           <div className="flex flex-col gap-6">
-            <div className="text-center text-xl">Are you sure you want to delete ?</div>
+            <div className="text-center text-xl">
+              Are you sure you want to delete ?
+            </div>
             <Common.Button
               label="Delete"
               type={buttonType.Submit}
