@@ -1,5 +1,6 @@
 import React from "react";
 import * as Common from "../Common/";
+
 type ButtonProps = {
   label: string;
   type: buttonType.Submit;

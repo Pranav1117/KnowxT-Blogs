@@ -5,34 +5,32 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import Spinner from "../../../../Components/Common/Spinner";
 import { login } from "../../../../Services/UsersService";
 import * as CONSTANT from "../../../../Constants/index";
-interface FormValues {
-  email: string;
-  password: string;
-}
-const initialValues: FormValues = {
-  email: "",  
-  password: "",
-};
+import { LoginFormValues } from "../../../../Types/userTypes";
 
 const LoginForm: React.FC = () => {
+  const initialValues: LoginFormValues = {
+    email: "",
+    password: "",
+  };
+
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
+      .email(CONSTANT.MESSAGES.EMAIL_INVALID_FORMAT)
+      .required(CONSTANT.MESSAGES.EMAIL_REQUIRED),
     password: Yup.string()
-      .min(6, "Password should be at least 6 characters")
-      .required("Password is required"),
+      .min(6, CONSTANT.MESSAGES.PASSWORD_LENGTH)
+      .required(CONSTANT.MESSAGES.PASSWORD_REQUIRED),
   });
 
-  const handleSubmit = async (values: FormValues) => {
-   const response = await login(values)
-   if(response?.status === 200){
-    localStorage.setItem("knowxt-token", response.data.token);
-    toast.success(CONSTANT.NOTIFICATIONS.LOGIN_SUCCESS);
-    navigate(CONSTANT.ROUTES.BLOG_ALL)
-   }
+  const handleSubmit = async (values: LoginFormValues) => {
+    const response = await login(values);
+    if (response?.status === 200) {
+      localStorage.setItem("knowxt-token", response.data.token);
+      toast.success(CONSTANT.NOTIFICATIONS.LOGIN_SUCCESS);
+      navigate(CONSTANT.ROUTES.BLOG_ALL);
+    }
   };
 
   const inputFieldsCss = "border-2 rounded p-2";
@@ -40,8 +38,8 @@ const LoginForm: React.FC = () => {
   const errorCss = "text-red-600";
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="flex flex-col gap-6 p-10 rounded w-[60%]">
+    <div className="flex justify-center items-center h-[100vh]">
+      <div className="flex flex-col gap-6 p-10 rounded w-[90%] md:w-[60%]">
         <div className="text-center text-3xl font-extrabold">Login</div>
         <div className="flex flex-col gap-4">
           <Formik

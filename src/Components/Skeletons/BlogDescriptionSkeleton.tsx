@@ -1,7 +1,7 @@
 
 const BlogDescriptionSkeleton = () => {
   return (
-    <div className="flex justify-between pt-24 px-8 w-[60%] mx-auto">
+    <div className="flex justify-between pt-24 px-8 w-[100%] md:w-[60%] mx-auto">
       <div className="animate-pulse flex flex-col space-x-4 gap-3 p-5 w-[80%] border-gray-200">
        
         <div className="flex-1 flex-col  space-y-8 py-1 ">

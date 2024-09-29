@@ -1,20 +1,16 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner } from "../../Components/Common";
-
-interface inputData {
-  title: string;
-  content: string;
-}
+import { InputForNewBlog } from "../../Types/blogsTypes";
 
 const UpdateBlog = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-  const [inputData, setInputData] = useState<inputData>({
+  const [inputData, setInputData] = useState<InputForNewBlog>({
     title: state.title,
     content: state.content,
   });
@@ -29,7 +25,7 @@ const UpdateBlog = () => {
     });
   };
 
-  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdate = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -70,20 +66,6 @@ const UpdateBlog = () => {
             value={inputData.content}
           />
           <div className="flex flex-col">
-            <div className="">
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Upload file
-              </label>
-              <input
-                className="block p-2 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none "
-                aria-describedby="file_input_help"
-                id="file_input"
-                type="file"
-              />
-              <p className="mt-1 text-sm text-gray-500 " id="file_input_help">
-                SVG, PNG, JPG or GIF (MAX. 800x400px).
-              </p>
-            </div>
             <div className="self-end">
               <button
                 className="bg-blue-600 py-2 px-6 text-white rounded hover:bg-blue-800 min-w-28"

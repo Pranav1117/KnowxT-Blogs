@@ -1,22 +1,20 @@
+import { useState, MouseEvent } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userAtom } from "../../Recoil/User";
-import { Spinner} from "../../Components/Common"
-
-interface inputData {
-  title: string;
-  content: string;
-}
+import { Spinner } from "../../Components/Common";
+import { InputForNewBlog } from "../../Types/blogsTypes";
 
 const CreateNewBlog = () => {
-  const navigate = useNavigate();
-  const user = useRecoilValue(userAtom);
+  const token = localStorage.getItem("knowxt-token");
 
+  const navigate = useNavigate();
+
+  const user = useRecoilValue(userAtom);
   const [loading, setLoading] = useState(false);
-  const [inputData, setInputData] = useState<inputData>({
+  const [inputData, setInputData] = useState<InputForNewBlog>({
     title: "",
     content: "",
   });
@@ -31,14 +29,23 @@ const CreateNewBlog = () => {
     });
   };
 
-  const handlePost = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePost = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://127.0.0.1:8787/api/v1/blog", {
-        ...inputData,
-        userId: user?.id,
-      });
+      const res = await axios.post(
+        "http://127.0.0.1:8787/api/v1/blog",
+        {
+          ...inputData,
+          userId: user?.id,
+        },
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (res.status === 200) {
         setLoading(false);
         toast.success("Blog uploaded sucessfully");
@@ -52,7 +59,7 @@ const CreateNewBlog = () => {
 
   return (
     <div className="pt-16 mt-10">
-      <div className=" w-[50%] p-2 mx-auto">
+      <div className="w-[90%] md:w-[50%] p-2 mx-auto">
         <form className="flex flex-col gap-3">
           <input
             name="title"
@@ -71,27 +78,13 @@ const CreateNewBlog = () => {
             value={inputData.content}
           />
           <div className="flex flex-col">
-            <div className="">
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                Upload file
-              </label>
-              <input
-                className="block p-2 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none "
-                aria-describedby="file_input_help"
-                id="file_input"
-                type="file"
-              />
-              <p className="mt-1 text-sm text-gray-500 " id="file_input_help">
-                SVG, PNG, JPG or GIF (MAX. 800x400px).
-              </p>
-            </div>
             <div className="self-end">
               <button
-                className="bg-blue-600 py-2 px-6 text-white rounded hover:bg-blue-800 min-w-28"
-                onClick={(e) => handlePost(e)}
+                className="bg-blue-600 py-2 px-6 text-white rounded hover:bg-blue-800 md:min-w-28"
+                onClick={handlePost}
               >
                 {" "}
-                {loading? <Spinner/> : "POST"}
+                {loading ? <Spinner /> : "POST"}
               </button>
             </div>
           </div>

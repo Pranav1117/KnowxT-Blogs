@@ -1,17 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import * as URL from "../Constants/index";
-
-interface FormValues {
-  email: string;
-  password: string;
-}
-
-interface Username {
-  username: string;
-}
-
-type SignUpFormValues = FormValues & Username;
+import { LoginFormValues, SignUpFormValues } from "../Types/userTypes";
 
 export const fetchUser = async (token: string | null) => {
   const res = await axios.get(URL.API.GET_USER, {
@@ -20,10 +10,10 @@ export const fetchUser = async (token: string | null) => {
   return res;
 };
 
-export const login = async (values: FormValues) => {
+export const login = async (values: LoginFormValues) => {
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8787/api/v1/user/signin",
+      URL.API.LOGIN,
       values
     );
     return response;
@@ -39,7 +29,7 @@ export const login = async (values: FormValues) => {
 export const signUp = async (values: SignUpFormValues) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8787/api/v1/user/signup",
+      URL.API.SIGN_UP,
       values
     );
    return res;

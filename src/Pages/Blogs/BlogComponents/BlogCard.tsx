@@ -1,19 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { getFormatedDate } from "../../../Utils/index";
+import { BlogCardProps } from "../../../Types/blogsTypes";
 
-interface BlogCardProps {
-  title: string;
-  content: string;
-  authorName: string;
-  blogId: string;
-}
+
 
 const BlogCard = ({ title, content, authorName, blogId }: BlogCardProps) => {
   const navigate = useNavigate();
 
   return (
     <div
-      className="p-5 border-b-2 flex items-center justify-between w-[100%] cursor-pointer"
+      className="p-2 md:p-5 border-b-2 flex items-center justify-between w-[100%] cursor-pointer"
       onClick={() => navigate(`/blog/${blogId}`, { state: blogId })}
     >
       <div>
@@ -30,16 +26,13 @@ const BlogCard = ({ title, content, authorName, blogId }: BlogCardProps) => {
               </div>
               <div className="text-gray-500 "> </div>
             </div>
-            <div className="font-bold text-4xl">{title}</div>
+            <div className="font-bold text-2xl md:text-4xl">{title}</div>
             <div className="text-xl">{content}</div>
           </div>
         </div>
         <div className="text-gray-500 px-5">
           - {Math.ceil(content.length / 100)} min read
         </div>
-      </div>
-      <div className="w-60 h-full">
-        {/* <img src={img} className="w-[100%]" /> */}
       </div>
     </div>
   );

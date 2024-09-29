@@ -1,21 +1,15 @@
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Common from "../../../../Components/Common";
-import axios from "axios";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import Spinner from "../../../../Components/Common/Spinner";
 import { signUp } from "../../../../Services/UsersService";
 import * as CONSTANT from "../../../../Constants/index";
+import { SignUpFormValues } from "../../../../Types/userTypes";
 
-interface FormValues {
-  username: string;
-  email: string;
-  password: string;
-}
 
-const initialValues: FormValues = {
+
+const initialValues: SignUpFormValues = {
   username: "",
   email: "",
   password: "",
@@ -25,16 +19,16 @@ const SignUpForm: React.FC = () => {
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
-    username: Yup.string().required("Username is required"),
+    username: Yup.string().required(CONSTANT.MESSAGES.USERNAME_REQUIRED),
     email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
+      .email(CONSTANT.MESSAGES.EMAIL_INVALID_FORMAT)
+      .required(CONSTANT.MESSAGES.EMAIL_REQUIRED),
     password: Yup.string()
-      .min(6, "Password should be at least 6 characters")
-      .required("Password is required"),
+      .min(6, CONSTANT.MESSAGES.PASSWORD_LENGTH)
+      .required(CONSTANT.MESSAGES.PASSWORD_REQUIRED),
   });
 
-  const handleSubmit = async (values: FormValues) => {
+  const handleSubmit = async (values: SignUpFormValues) => {
     const response = await signUp(values);
     if (response?.status === 200) {
       localStorage.setItem("knowxt-token", response.data.token);
@@ -48,8 +42,8 @@ const SignUpForm: React.FC = () => {
   const errorCss = "text-red-600";
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="flex flex-col gap-6 p-10 rounded w-[60%]">
+    <div className="flex justify-center items-center h-[100vh]">
+      <div className="flex flex-col gap-6 p-10 rounded w-[90%] md:w-[60%]">
         <div className="text-center text-3xl font-extrabold">
           Create An Acount
         </div>

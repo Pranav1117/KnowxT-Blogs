@@ -2,40 +2,30 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineModeEditOutline, MdDeleteOutline } from "react-icons/md";
-import AuthorComponent from "./BlogComponents/AuthorComponent";
-import { getFormatedDate } from "../../Utils/index";
-import BlogDescriptionSkeleton from "../../Components/Skeletons/BlogDescriptionSkeleton";
-import { deleteBlog, fetchBlogById } from "../../Services/BlogsService";
 import * as CONSTANT from "../../Constants/index";
+import AuthorComponent from "./BlogComponents/AuthorComponent";
 import Modal from "../../Components/Common/Modal";
-import * as Common from "../../Components/Common";
+import { getFormatedDate } from "../../Utils/index";
+import { deleteBlog, fetchBlogById } from "../../Services/BlogsService";
+import { Common, Skeletons,  } from "../../Components"
 import { buttonType } from "../../Components/Common/Button";
-interface Author {
-  username: string;
-  email: string;
-  password?: string;
-  id: number;
-}
+import { useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { userAtom, userSelector } from "../../Recoil/User";
+import { Blog } from "../../Types/blogsTypes";
 
-interface Blog {
-  author: Author;
-  authorId: number;
-  content: string;
-  createdAt: string;
-  id: string;
-  published: boolean;
-  title: string;
-}
 
 const BlogDescription = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
+  // const userLoadable = useRecoilValueLoadable(userSelector);
+  const user = useRecoilValue(userAtom)
   const handleEdit = () => {
     navigate(CONSTANT.ROUTES.BLOG_UPDATE, { state: blog });
   };
@@ -66,25 +56,25 @@ const BlogDescription = () => {
   if (loading)
     return (
       <>
-        <BlogDescriptionSkeleton />
+        <Skeletons.BlogDescription />
       </>
     );
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="pt-24 px-8">
+    <div className="pt-14 md:pt-24 md:px-8">
       {blog ? (
-        <div className="w-[90%] mx-auto p-5 flex gap-5">
-          <div className="flex flex-col p-2 min-h-[70vh] w-[70%]">
+        <div className="w-[90%] mx-auto p-2 md:p-5 flex flex-col-reverse md:flex-row gap-2 md:gap-5">
+          <div className="flex flex-col p-2 w-[90%] min-h-[50vh] md:min-h-[70vh] md:w-[70%]">
             <div>
-              <h1 className="text-3xl font-bold mb-4 text-center">
+              <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-4 md:text-center">
                 {blog.title}
               </h1>
-              <div className="flex items-center gap-8 p-4 justify-end">
+              <div className="flex items-center mb-5 md:mb-0 justify-between gap-5 md:gap-8 py-2 md:p-4 md:justify-end">
                 <p className="text-sm text-gray-500">
                   Published on {getFormatedDate(blog.createdAt)}
                 </p>
-                <div className="flex gap-3">
+                <div className={`${user?.id === blog.author.id ? "flex" : "hidden"} gap-3`}>
                   <MdOutlineModeEditOutline
                     className="cursor-pointer"
                     onClick={handleEdit}
@@ -103,7 +93,7 @@ const BlogDescription = () => {
               <p className="text-lg mb-6">{blog.content}</p>
             </div>
           </div>
-          <div className="p-2 w-[25%]">
+          <div className="p-2 w-[100%] md:w-[25%]">
             <div className="text-xl">Author</div>
             <AuthorComponent
               authorName={blog.author.username}
@@ -121,8 +111,8 @@ const BlogDescription = () => {
             setShowDeletePopup(false);
           }}
         >
-          <div className="flex flex-col gap-4">
-            <div>Are you sure you want to delete blog?</div>
+          <div className="flex flex-col gap-6">
+            <div className="text-center text-xl">Are you sure you want to delete ?</div>
             <Common.Button
               label="Delete"
               type={buttonType.Submit}

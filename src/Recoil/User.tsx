@@ -1,15 +1,9 @@
 import { atom, selector } from "recoil";
 import { fetchUser } from "../Services/UsersService";
 import { getUserToken } from "../Utils";
+import { AuthorProps } from "../Types/blogsTypes";
 
-interface User {
-  id: number;
-  email: string;
-  username: string;
-  password?: string;
-}
-
-export const userAtom = atom<User | null>({
+export const userAtom = atom<AuthorProps | null>({
   key: "userState",
   default: null,
 });
@@ -19,12 +13,10 @@ export const userSelector = selector({
   get: async ({ get }) => {
     const user = get(userAtom);
 
-    // If user is already in atom state, return it.
     if (user) {
       return user;
     }
 
-    // Token should be fetched here to ensure it's up-to-date.
     const token = getUserToken();
 
     if (!token) {
@@ -36,7 +28,7 @@ export const userSelector = selector({
       return data;
     } catch (error) {
       console.error("Error fetching user:", error);
-      throw error; // Optionally rethrow the error to handle it further up in the component.
+      throw error; 
     }
   },
 });
