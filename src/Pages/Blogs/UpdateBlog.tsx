@@ -4,8 +4,11 @@ import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner } from "../../Components/Common";
 import { InputForNewBlog } from "../../Types/blogsTypes";
+import { BASE_URL } from "../../Constants";
 
 const UpdateBlog = () => {
+  const token = localStorage.getItem("knowxt-token");
+
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -31,8 +34,14 @@ const UpdateBlog = () => {
     try {
       const updatedBlog = { ...inputData, id: state.id };
       const res = await axios.patch(
-        "http://127.0.0.1:8787/api/v1/blog/updateblog",
-        updatedBlog
+        `${BASE_URL}/blog/updateblog`,
+        updatedBlog,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+            "Content-Type": "application/json",
+          },
+        }
       );
       if (res.status === 200) {
         setLoading(false);

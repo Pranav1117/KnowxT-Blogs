@@ -27,10 +27,7 @@ export const userSelector = selector({
       const { data } = await fetchUser(token);
       return data;
     } catch (error) {
-      console.error("Error fetching user:", error);
-      throw error; 
+      throw error;
     }
   },
 });
-
-

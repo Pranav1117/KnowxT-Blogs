@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import { userAtom } from "../../Recoil/User";
 import { Spinner } from "../../Components/Common";
 import { InputForNewBlog } from "../../Types/blogsTypes";
+import { BASE_URL } from "../../Constants";
 
 const CreateNewBlog = () => {
   const token = localStorage.getItem("knowxt-token");
@@ -34,7 +35,7 @@ const CreateNewBlog = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8787/api/v1/blog",
+        `${BASE_URL}/blog`,
         {
           ...inputData,
           userId: user?.id,
