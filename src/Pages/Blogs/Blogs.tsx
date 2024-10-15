@@ -39,9 +39,9 @@ const Blogs = () => {
       >
         <div className="md:w-[90%] lg:w-[70%] bg-white shadow-lg mx-auto">
           {allBlogs.length > 0
-            ? allBlogs.map((blog) => {
+            ? allBlogs.map((blog, index) => {
                 return (
-                  <div className="flex">
+                  <div className="flex" key={index}>
                     <BlogCard
                       blogId={blog.id}
                       title={blog.title}

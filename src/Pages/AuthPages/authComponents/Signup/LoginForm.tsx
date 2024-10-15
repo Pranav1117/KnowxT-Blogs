@@ -9,8 +9,8 @@ import { LoginFormValues } from "../../../../Types/userTypes";
 
 const LoginForm: React.FC = () => {
   const initialValues: LoginFormValues = {
-    email: "",
-    password: "",
+    email: "harry@gamil.com",
+    password: "12345678",
   };
 
   const navigate = useNavigate();
